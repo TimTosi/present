@@ -1,0 +1,78 @@
+Show & Tell: Docker & FishFinger
+Core Service Team
+14:00 18 Jul 2017
+
+Tim Tosi
+Core Service Dev, LML Technologies
+timothee.tosi@gmail.com
+
+* What we just saw
+
+- Usin docker-compose allows to write integration tests locally which impoves the safety of our services
+- Using docker compose allows to reduce greatly the time spent on test as we don t need to deploy to concourse in order to check code updates
+
+* What can we improve from here ?
+
+The solution proposed is to use scripting to launch docker-compose *BEFORE* tests execution
+
+What if you could programmatically handle everything INSIDE your test code and Using
+your compose file as a native Go object ?
+
+This is why FishFinger has been developped.
+
+* What is FishFinger ?
+
+FishFinger is a Dockerfile and Docker-Compose lightweight programmatic library
+written in Go. This project provides easy to use abstractions of official Docker
+libraries with no other dependency than official Docker libraries.
+
+* What does it provides ?
+
+An fine grained & programmatic control over your compose file.
+
+Launch it & stop it at will.
+
+.code launch1.go /START OMIT/,/END OMIT/
+
+* Integration with test codebase
+
+For convenience, let's just set an setup & a tear down functions
+
+.code test1.go /START OMIT/,/END OMIT/
+
+* Integration with test codebase
+
+Now here is what our test looks like:
+
+.code test2.go /START OMIT/,/END OMIT/
+
+* Integration with test codebase
+
+Of course, we could get rid og the setup and tear down functions but using them
+ensures that a fresh new deterministic environment is provided between each test.
+
+That means a test does NOT introduce biases for another test, resulting in
+false positive and/or false negative results.
+
+And this is a safety that the use of scripting to launch docker-compose *BEFORE*
+tests execution does not provide.
+
+* hmmm
+
+* Wait there's MUCH more...
+
+But TBH the original main purpose of this package is elsewhere.
+
+Actually, I used to do integration tests WITH the use of an external script at my previous work...
+
+// Gopher image confused
+
+* But...
+
+But it was UNTIL I ran into this hell:
+.image issue.png
+
+This is called the container initialization delay.
+And trust me when I tell you: this issue is closed but NOT resolved.
+
+*
