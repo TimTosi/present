@@ -1,0 +1,89 @@
+Golang Platform Layer V2
+Technical Standard Meeting
+14:00 18 Jul 2017
+
+Tim Tosi
+Core Service Dev, LML Technologies
+timothee.tosi@gmail.com
+
+* Before Everything Else
+
+Before updating the current Platform Layer V2, we should migrate all others
+Golang services to the current standard.
+
+Otherwise it will increase chances to introduce code bugs as we will have to
+comply with all changes at once.
+
+* Table of Contents
+
+- Log
+- queue.SQS
+- Documentation
+
+* Rework of Log
+
+Suppression of Unused / Weird code:
+
+- Package level variables
+.code log1.go /START OMIT/,/END OMIT/
+- Non standard init function
+.code log2.go /START OMIT/,/END OMIT/
+
+Replace by constructor.
+
+* Rework of Log
+
+Suppression and replacement of unused / non standard functions:
+.code log3.go /START OMIT/,/END OMIT/
+Because in Go you "Don't Panic" !!!
+.link https://github.com/golang/go/wiki/CodeReviewComments#dont-panic Official Standard
+A replacement by `log.Ftl` would fit *nicely*.
+
+* Rework of Log
+
+Suppression and replacement of unused / non standard functions:
+.code log4.go /START OMIT/,/END OMIT/
+Do we use these functions ?
+
+* HERE BE DRAGONS
+
+* Rework of queue.SQS
+
+.code sqs1.go /START OMIT/,/END OMIT/
+- Use of option pattern instead of these three functions
+
+* Rework of queue.SQS
+
+- Suppression of package defined `interface`
+.code sqs2.go /START OMIT/,/END OMIT/
+
+- Official Go Team says:
+
+"Do not define interfaces on the implementor side of an API "for mocking"; instead, design the API so that it can be tested using the public API of the real implementation."
+
+"Do not define interfaces before they are used: without a realistic example of usage, it is too difficult to see whether an interface is even necessary, let alone what methods it ought to contain."
+.link https://github.com/golang/go/wiki/CodeReviewComments#interfaces Official Standard
+
+* Go Documentation
+
+- Go documentation generation
+.image first.png
+
+* Go Documentation
+
+- Go documentation generation
+.image second.png
+
+* Go Documentation
+
+- Provides a nice and easy way to read someone's else code
+- Enforce good & standard formatting of documentation
+
+- Official Go Team says:
+"Doc comments work best as complete sentences, which allow a wide variety of automated presentations. The first sentence should be a one-sentence summary that starts with the name being declared."
+
+Which means this =>
+.code comment.go /START OMIT/,/END OMIT/
+is a good code comment.
+
+.link https://golang.org/doc/effective_go.html#commentary Official Standard
